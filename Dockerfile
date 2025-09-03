@@ -4,18 +4,17 @@ FROM node:18-alpine
 # Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-COPY server/package*.json ./server/
+# Copy server package files
+COPY server/package*.json ./
 
 # Install dependencies
-RUN cd server && npm install
+RUN npm install
 
-# Copy source code
-COPY . .
+# Copy server source code
+COPY server/ ./
 
-# Build the server with error tolerance
-RUN cd server && npm run build || echo "Build completed with warnings"
+# Build the server with skip lib check
+RUN npx tsc --skipLibCheck
 
 # Expose port
 EXPOSE 3000

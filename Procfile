@@ -1,1 +1,1 @@
-web: cd server && npm install && npx tsc --skipLibCheck && npm start
+web: npm run start:production
