@@ -7,11 +7,9 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "start": "bash start.sh",
-    "start:production": "bash start.sh",
-    "install:server": "cd server && npm install",
-    "build:server": "cd server && npx tsc --skipLibCheck",
-    "postinstall": "npm run install:server"
+    "start": "cd server && npm start",
+    "build": "cd server && npm run build",
+    "install": "cd server && npm install"
   },
   "keywords": ["mcp", "model-context-protocol", "cv", "resume", "email"],
   "author": "Dulshan201",

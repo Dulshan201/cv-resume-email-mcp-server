@@ -94,8 +94,9 @@ class MCPServer {
   }
 
   async run(): Promise<void> {
-    // Check if running in production/HTTP mode (for Railway deployment)
-    if (process.env.NODE_ENV === 'production' || process.env.PORT || process.env.HTTP_MODE) {
+    // Check if running in production/HTTP mode (Railway sets PORT automatically)
+    if (process.env.PORT) {
+      console.log('🚀 Detected PORT environment variable - starting HTTP server mode');
       this.startHttpServer();
     } else {
       // Default stdio mode for local MCP usage

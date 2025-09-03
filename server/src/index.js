@@ -54,6 +54,7 @@ var stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
 var types_js_1 = require("@modelcontextprotocol/sdk/types.js");
 var resume_1 = require("./resume");
 var email_1 = require("./email");
+var http = require("http");
 var MCPServer = /** @class */ (function () {
     function MCPServer() {
         this.server = new index_js_1.Server({
@@ -147,14 +148,82 @@ var MCPServer = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        if (!process.env.PORT) return [3 /*break*/, 1];
+                        console.log('🚀 Detected PORT environment variable - starting HTTP server mode');
+                        this.startHttpServer();
+                        return [3 /*break*/, 3];
+                    case 1:
                         transport = new stdio_js_1.StdioServerTransport();
                         return [4 /*yield*/, this.server.connect(transport)];
-                    case 1:
+                    case 2:
                         _a.sent();
                         console.error('CV & Email MCP Server running on stdio');
-                        return [2 /*return*/];
+                        _a.label = 3;
+                    case 3: return [2 /*return*/];
                 }
             });
+        });
+    };
+    MCPServer.prototype.startHttpServer = function () {
+        var port = process.env.PORT || 3000;
+        var httpServer = http.createServer(function (req, res) {
+            // Set CORS headers
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+            if (req.method === 'OPTIONS') {
+                res.writeHead(200);
+                res.end();
+                return;
+            }
+            if (req.method === 'GET' && req.url === '/') {
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({
+                    name: 'CV Resume Email MCP Server',
+                    version: '1.0.0',
+                    status: 'running',
+                    tools: ['load_cv', 'query_cv', 'send_email', 'test_email_connection'],
+                    description: 'Model Context Protocol server for CV parsing and email notifications',
+                    endpoints: {
+                        health: '/health',
+                        tools: '/tools',
+                        docs: '/docs'
+                    },
+                    repository: 'https://github.com/Dulshan201/cv-resume-email-mcp-server'
+                }, null, 2));
+            }
+            else if (req.method === 'GET' && req.url === '/health') {
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({
+                    status: 'healthy',
+                    timestamp: new Date().toISOString(),
+                    port: port
+                }));
+            }
+            else if (req.method === 'GET' && req.url === '/tools') {
+                var allTools = __spreadArray(__spreadArray([], resume_1.resumeTools, true), email_1.emailTools, true);
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({
+                    tools: allTools.map(function (tool) { return ({
+                        name: tool.name,
+                        description: tool.description,
+                    }); }),
+                }, null, 2));
+            }
+            else if (req.method === 'GET' && req.url === '/docs') {
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.end("\n          <!DOCTYPE html>\n          <html>\n          <head>\n            <title>CV Resume Email MCP Server</title>\n            <style>\n              body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #f5f5f5; }\n              .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }\n              .tool { background: #e3f2fd; padding: 15px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #1976d2; }\n              .endpoint { background: #f3e5f5; padding: 10px; margin: 5px 0; border-radius: 3px; }\n              h1 { color: #1976d2; }\n              h2 { color: #333; border-bottom: 2px solid #1976d2; padding-bottom: 5px; }\n              .success { color: #4caf50; font-weight: bold; }\n            </style>\n          </head>\n          <body>\n            <div class=\"container\">\n              <h1>\uD83D\uDE80 CV Resume Email MCP Server</h1>\n              <p class=\"success\">\u2705 Server is running successfully!</p>\n              <p>Model Context Protocol server for CV parsing and email notifications</p>\n              \n              <h2>\uD83D\uDCCB Available Tools</h2>\n              <div class=\"tool\">\n                <h3>\uD83D\uDD0D load_cv</h3>\n                <p>Load and parse a PDF resume file for analysis</p>\n              </div>\n              <div class=\"tool\">\n                <h3>\uD83D\uDCAC query_cv</h3>\n                <p>Query information from loaded CV using natural language</p>\n              </div>\n              <div class=\"tool\">\n                <h3>\uD83D\uDCE7 send_email</h3>\n                <p>Send email notifications with custom recipient, subject, and body</p>\n              </div>\n              <div class=\"tool\">\n                <h3>\uD83D\uDD27 test_email_connection</h3>\n                <p>Test email service configuration and connectivity</p>\n              </div>\n\n              <h2>\uD83D\uDD17 API Endpoints</h2>\n              <div class=\"endpoint\">\n                <strong>GET /</strong> - Server information and status\n              </div>\n              <div class=\"endpoint\">\n                <strong>GET /health</strong> - Health check endpoint  \n              </div>\n              <div class=\"endpoint\">\n                <strong>GET /tools</strong> - List all available MCP tools\n              </div>\n              <div class=\"endpoint\">\n                <strong>GET /docs</strong> - This documentation page\n              </div>\n\n              <h2>\uD83D\uDD27 Usage</h2>\n              <p>This server implements the Model Context Protocol (MCP) for AI assistants to interact with CV parsing and email capabilities.</p>\n              <p>For local MCP usage, run the server without HTTP_MODE environment variable.</p>\n              \n              <h2>\uD83D\uDCD6 Links</h2>\n              <p>\n                <a href=\"https://github.com/Dulshan201/cv-resume-email-mcp-server\" target=\"_blank\">\uD83D\uDCC1 GitHub Repository</a><br>\n                <a href=\"https://modelcontextprotocol.io/\" target=\"_blank\">\uD83D\uDCDA MCP Documentation</a>\n              </p>\n            </div>\n          </body>\n          </html>\n        ");
+            }
+            else {
+                res.writeHead(404, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Not found', path: req.url }));
+            }
+        });
+        httpServer.listen(Number(port), function () {
+            console.log("\uD83D\uDE80 CV & Email MCP Server running on port ".concat(port));
+            console.log("\uD83D\uDCD6 Documentation: http://localhost:".concat(port, "/docs"));
+            console.log("\uD83D\uDD27 Tools API: http://localhost:".concat(port, "/tools"));
+            console.log("\u2764\uFE0F  Health Check: http://localhost:".concat(port, "/health"));
         });
     };
     return MCPServer;
