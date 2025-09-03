@@ -1,1 +1,1 @@
-web: npm install --prefix server && npm run build --prefix server && npm start --prefix server
+web: cd server && npm install && npx tsc --skipLibCheck && npm start

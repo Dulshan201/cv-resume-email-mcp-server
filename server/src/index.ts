@@ -94,12 +94,21 @@ class MCPServer {
   }
 
   async run(): Promise<void> {
-    // Check if running in production/HTTP mode (Railway sets PORT automatically)
-    if (process.env.PORT) {
-      console.log('🚀 Detected PORT environment variable - starting HTTP server mode');
+    // For Railway deployment, force HTTP mode
+    const isRailway = process.env.RAILWAY_ENVIRONMENT || process.env.PORT || process.argv.includes('--http');
+    
+    console.log('🔍 Environment check:');
+    console.log('  - PORT:', process.env.PORT);
+    console.log('  - RAILWAY_ENVIRONMENT:', process.env.RAILWAY_ENVIRONMENT);
+    console.log('  - Args:', process.argv);
+    console.log('  - Force HTTP:', isRailway ? 'YES' : 'NO');
+    
+    if (isRailway) {
+      console.log('🚀 Starting HTTP server mode for Railway deployment');
       this.startHttpServer();
     } else {
       // Default stdio mode for local MCP usage
+      console.log('🔧 Starting stdio mode for local MCP usage');
       const transport = new StdioServerTransport();
       await this.server.connect(transport);
       console.error('CV & Email MCP Server running on stdio');

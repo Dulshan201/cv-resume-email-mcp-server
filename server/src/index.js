@@ -144,22 +144,30 @@ var MCPServer = /** @class */ (function () {
     };
     MCPServer.prototype.run = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var transport;
+            var port, transport;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!process.env.PORT) return [3 /*break*/, 1];
+                        port = process.env.PORT;
+                        console.log('Environment check - PORT:', port);
+                        if (!port) return [3 /*break*/, 1];
                         console.log('🚀 Detected PORT environment variable - starting HTTP server mode');
                         this.startHttpServer();
-                        return [3 /*break*/, 3];
+                        return [3 /*break*/, 4];
                     case 1:
+                        console.log('🔧 No PORT detected - checking for production mode');
+                        if (!(process.stdin.isTTY === false)) return [3 /*break*/, 2];
+                        console.log('🚀 Non-TTY environment detected - starting HTTP server mode');
+                        this.startHttpServer();
+                        return [3 /*break*/, 4];
+                    case 2:
                         transport = new stdio_js_1.StdioServerTransport();
                         return [4 /*yield*/, this.server.connect(transport)];
-                    case 2:
+                    case 3:
                         _a.sent();
                         console.error('CV & Email MCP Server running on stdio');
-                        _a.label = 3;
-                    case 3: return [2 /*return*/];
+                        _a.label = 4;
+                    case 4: return [2 /*return*/];
                 }
             });
         });
