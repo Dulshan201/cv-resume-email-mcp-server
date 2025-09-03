@@ -1,0 +1,40 @@
+const fs = require('fs');
+
+// Create a simple text-based "PDF" for testing
+// In a real scenario, you'd use a proper PDF library
+const resumeContent = `
+JOHN SMITH
+Senior Software Engineer
+
+CONTACT:
+Email: john.smith@email.com
+Phone: (555) 123-4567
+Location: San Francisco, CA
+
+EXPERIENCE:
+Senior Software Engineer at TechCorp (2020-2024)
+- Led development of microservices architecture using Node.js and TypeScript
+- Implemented CI/CD pipelines reducing deployment time by 60%
+- Mentored 5 junior developers and conducted code reviews
+- Technologies: TypeScript, Node.js, Docker, Kubernetes, AWS
+
+Software Engineer at StartupXYZ (2018-2020)
+- Built full-stack web applications using React and Express.js
+- Designed and implemented RESTful APIs serving 100k+ daily requests
+- Optimized database queries improving performance by 40%
+- Technologies: React, Express.js, PostgreSQL, Redis
+
+SKILLS:
+- Programming Languages: TypeScript, JavaScript, Python, Java
+- Frameworks: Node.js, React, Express.js, Next.js
+- Databases: PostgreSQL, MongoDB, Redis
+- Cloud: AWS, Docker, Kubernetes
+- Tools: Git, Jenkins, Jest, Webpack
+
+EDUCATION:
+Bachelor of Science in Computer Science
+University of California, Berkeley (2014-2018)
+`;
+
+fs.writeFileSync('sample-resume.pdf', resumeContent);
+console.log('Created sample resume PDF');

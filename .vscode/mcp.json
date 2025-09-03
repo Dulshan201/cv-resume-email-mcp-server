@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "cv-email-mcp-server": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["server/dist/index.js"]
+    }
+  }
+}

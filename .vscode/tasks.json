@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build and Start MCP Server",
+			"type": "shell",
+			"command": "cd server && npm run build && npm start",
+			"group": "build",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"isBackground": true
+		}
+	]
+}
