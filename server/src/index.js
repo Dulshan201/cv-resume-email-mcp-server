@@ -52,8 +52,8 @@ dotenv.config();
 var index_js_1 = require("@modelcontextprotocol/sdk/server/index.js");
 var stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
 var types_js_1 = require("@modelcontextprotocol/sdk/types.js");
-var resume_js_1 = require("./resume.js");
-var email_js_1 = require("./email.js");
+var resume_1 = require("./resume");
+var email_1 = require("./email");
 var MCPServer = /** @class */ (function () {
     function MCPServer() {
         this.server = new index_js_1.Server({
@@ -70,7 +70,7 @@ var MCPServer = /** @class */ (function () {
     MCPServer.prototype.setupToolHandlers = function () {
         var _this = this;
         // Combine all tools
-        var allTools = __spreadArray(__spreadArray([], resume_js_1.resumeTools, true), email_js_1.emailTools, true);
+        var allTools = __spreadArray(__spreadArray([], resume_1.resumeTools, true), email_1.emailTools, true);
         // List available tools
         this.server.setRequestHandler(types_js_1.ListToolsRequestSchema, function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {

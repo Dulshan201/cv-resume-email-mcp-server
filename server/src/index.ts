@@ -10,8 +10,8 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { resumeTools } from './resume.js';
-import { emailTools } from './email.js';
+import { resumeTools } from './resume';
+import { emailTools } from './email';
 
 class MCPServer {
   private server: Server;
