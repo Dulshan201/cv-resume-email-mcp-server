@@ -9,7 +9,7 @@
   "scripts": {
     "install:server": "cd server && npm install",
     "build:server": "cd server && npx tsc --skipLibCheck",
-    "start:production": "cd server && npm install && npx tsc --skipLibCheck && npm start",
+    "start:production": "cd server && npm install && npx tsc --skipLibCheck && NODE_ENV=production npm start",
     "postinstall": "npm run install:server"
   },
   "keywords": ["mcp", "model-context-protocol", "cv", "resume", "email"],
