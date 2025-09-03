@@ -144,30 +144,40 @@ var MCPServer = /** @class */ (function () {
     };
     MCPServer.prototype.run = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var port, transport;
+            var isDeployment, forceHttp, transport;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        port = process.env.PORT;
-                        console.log('Environment check - PORT:', port);
-                        if (!port) return [3 /*break*/, 1];
-                        console.log('🚀 Detected PORT environment variable - starting HTTP server mode');
+                        isDeployment = !!(process.env.PORT ||
+                            process.env.RAILWAY_ENVIRONMENT ||
+                            process.env.HTTP_MODE ||
+                            process.env.NODE_ENV === 'production' ||
+                            process.env.RAILWAY_PROJECT_ID ||
+                            process.env.RAILWAY_SERVICE_ID ||
+                            // Always use HTTP mode if PORT is available (common in cloud deployments)
+                            process.env.PORT);
+                        forceHttp = isDeployment || process.argv.includes('--http');
+                        console.log('🔍 Environment check:');
+                        console.log('  - PORT:', process.env.PORT);
+                        console.log('  - RAILWAY_ENVIRONMENT:', process.env.RAILWAY_ENVIRONMENT);
+                        console.log('  - RAILWAY_PROJECT_ID:', process.env.RAILWAY_PROJECT_ID);
+                        console.log('  - NODE_ENV:', process.env.NODE_ENV);
+                        console.log('  - Args:', process.argv.slice(2));
+                        console.log('  - Force HTTP:', forceHttp ? 'YES' : 'NO');
+                        if (!forceHttp) return [3 /*break*/, 1];
+                        console.log('🚀 Starting HTTP server mode for deployment');
                         this.startHttpServer();
-                        return [3 /*break*/, 4];
+                        return [3 /*break*/, 3];
                     case 1:
-                        console.log('🔧 No PORT detected - checking for production mode');
-                        if (!(process.stdin.isTTY === false)) return [3 /*break*/, 2];
-                        console.log('🚀 Non-TTY environment detected - starting HTTP server mode');
-                        this.startHttpServer();
-                        return [3 /*break*/, 4];
-                    case 2:
+                        // Default stdio mode for local MCP usage
+                        console.log('🔧 Starting stdio mode for local MCP usage');
                         transport = new stdio_js_1.StdioServerTransport();
                         return [4 /*yield*/, this.server.connect(transport)];
-                    case 3:
+                    case 2:
                         _a.sent();
                         console.error('CV & Email MCP Server running on stdio');
-                        _a.label = 4;
-                    case 4: return [2 /*return*/];
+                        _a.label = 3;
+                    case 3: return [2 /*return*/];
                 }
             });
         });

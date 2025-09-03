@@ -94,17 +94,32 @@ class MCPServer {
   }
 
   async run(): Promise<void> {
-    // For Railway deployment, force HTTP mode
-    const isRailway = process.env.RAILWAY_ENVIRONMENT || process.env.PORT || process.argv.includes('--http');
+    // Check if we're running on Railway or need HTTP mode
+    // Be more aggressive about detecting deployment environments
+    const isDeployment = !!(
+      process.env.PORT || 
+      process.env.RAILWAY_ENVIRONMENT || 
+      process.env.HTTP_MODE ||
+      process.env.NODE_ENV === 'production' ||
+      process.env.RAILWAY_PROJECT_ID ||
+      process.env.RAILWAY_SERVICE_ID ||
+      // Always use HTTP mode if PORT is available (common in cloud deployments)
+      process.env.PORT
+    );
+    
+    // Force HTTP mode if any deployment indicators are present
+    const forceHttp = isDeployment || process.argv.includes('--http');
     
     console.log('🔍 Environment check:');
     console.log('  - PORT:', process.env.PORT);
     console.log('  - RAILWAY_ENVIRONMENT:', process.env.RAILWAY_ENVIRONMENT);
-    console.log('  - Args:', process.argv);
-    console.log('  - Force HTTP:', isRailway ? 'YES' : 'NO');
+    console.log('  - RAILWAY_PROJECT_ID:', process.env.RAILWAY_PROJECT_ID);
+    console.log('  - NODE_ENV:', process.env.NODE_ENV);
+    console.log('  - Args:', process.argv.slice(2));
+    console.log('  - Force HTTP:', forceHttp ? 'YES' : 'NO');
     
-    if (isRailway) {
-      console.log('🚀 Starting HTTP server mode for Railway deployment');
+    if (forceHttp) {
+      console.log('🚀 Starting HTTP server mode for deployment');
       this.startHttpServer();
     } else {
       // Default stdio mode for local MCP usage
