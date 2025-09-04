@@ -1,5 +1,11 @@
 [build]
-  builder = "nixpacks"
+builder = "nixpacks"
+
+[deploy]
+startCommand = "cd server && node dist/http-server.js"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "on-failure"der = "nixpacks"
 
 [deploy]
   startCommand = "cd server && node dist/http-server.js"
