@@ -1,1 +1,1 @@
-web: ./start.sh
+web: cd server && node dist/http-server.js
