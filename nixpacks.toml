@@ -1,14 +1,8 @@
-[phases.install]
-cmds = ["echo 'Skipping root install'"]
-
 [phases.build]
 cmds = [
   "cd server && npm ci",
   "cd server && npx tsc --skipLibCheck"
 ]
-
-[start]
-cmd = "cd server && node dist/index.js"
 
 [variables]
 NODE_ENV = "production"
