@@ -12,12 +12,19 @@ RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
 
 # Copy package files from server directory
 COPY server/package*.json ./
+COPY server/tsconfig.json ./
 
-# Install dependencies
+# Install dependencies including dev dependencies for building
+RUN npm ci && npm cache clean --force
+
+# Copy source code
+COPY server/src ./src
+
+# Build TypeScript
+RUN npx tsc --skipLibCheck
+
+# Remove dev dependencies to reduce image size
 RUN npm ci --only=production && npm cache clean --force
-
-# Copy pre-built application
-COPY server/dist ./dist
 
 # Change ownership to nodejs user
 RUN chown -R nodejs:nodejs /app
