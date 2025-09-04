@@ -16,8 +16,13 @@ COPY server/ ./
 # Build the server with skip lib check
 RUN npx tsc --skipLibCheck
 
-# Expose port
+# Expose port (Railway uses PORT environment variable)
+EXPOSE $PORT
 EXPOSE 3000
 
-# Start the server
-CMD ["npm", "start"]
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=3000
+
+# Start the HTTP server directly
+CMD ["node", "dist/http-server.js"]

@@ -1,0 +1,38 @@
+{
+  "name": "CV & Email MCP Server",
+  "description": "A Model Context Protocol server for CV/resume parsing and email notifications",
+  "repository": "https://github.com/yourusername/cv-email-mcp-server",
+  "logo": "https://node-js-sample.herokuapp.com/node.png",
+  "keywords": ["node", "express", "mcp", "cv", "email", "typescript"],
+  "image": "heroku/nodejs",
+  "stack": "heroku-22",
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nodejs"
+    }
+  ],
+  "env": {
+    "NODE_ENV": {
+      "description": "Node environment",
+      "value": "production"
+    },
+    "NPM_CONFIG_PRODUCTION": {
+      "description": "Skip dev dependencies",
+      "value": "false"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "eco"
+    }
+  },
+  "scripts": {
+    "postdeploy": "echo 'CV & Email MCP Server deployed successfully!'"
+  },
+  "addons": [
+    {
+      "plan": "heroku-redis:mini"
+    }
+  ]
+}

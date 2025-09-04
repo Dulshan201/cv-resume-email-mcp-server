@@ -1,1 +1,1 @@
-web: cd server && node dist/http-server.js
+web: node dist/http-server.js

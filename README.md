@@ -2,6 +2,18 @@
 
 A Model Context Protocol (MCP) server that provides CV/resume parsing and email notification capabilities. This project enables AI assistants to read PDF resumes, extract information, and send email notifications through a standardized MCP interface.
 
+## 🚀 Quick Deploy
+
+**Ready for production!** Choose your deployment method:
+
+- **🚄 Railway**: `git push` → auto-deploy ([Guide](./DEPLOYMENT.md#railway))
+- **🐳 Local Docker**: `.\deploy.ps1 local` or `./deploy.sh local`
+- **☁️ Render**: Connect GitHub repo ([Guide](./DEPLOYMENT.md#render))  
+- **⚡ Heroku**: `.\deploy.ps1 heroku` or `./deploy.sh heroku`
+- **🌩️ Google Cloud**: `.\deploy.ps1 gcloud` or `./deploy.sh gcloud`
+
+See [QUICK-START.md](./QUICK-START.md) for 30-second deployment or [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed guides.
+
 ## Features
 
 - **CV/Resume Parsing**: Parse PDF resumes and answer questions about work experience, skills, and career history
@@ -70,7 +82,44 @@ SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 ```
 
-### VS Code Integration
+## 🐳 Production Deployment
+
+This project includes production-ready Docker configurations and deployment scripts for multiple cloud platforms:
+
+### Docker
+```bash
+# Build optimized production image
+docker build -f Dockerfile.optimized -t cv-email-mcp-server .
+
+# Run locally
+docker run -p 3001:3000 cv-email-mcp-server
+```
+
+### Cloud Platforms
+- **Railway**: Auto-deploy from GitHub with `railway.toml`
+- **Render**: Deploy with `render.yaml` configuration  
+- **Heroku**: Container deployment with `Procfile`
+- **Google Cloud Run**: Serverless deployment with `cloud-run.yaml`
+
+### Deployment Scripts
+```bash
+# Windows PowerShell
+.\deploy.ps1 [platform]  # local, railway, heroku, gcloud
+
+# Linux/Mac  
+./deploy.sh [platform]   # local, railway, render, heroku, gcloud
+```
+
+### Status Monitoring
+```bash
+# Check deployment health
+.\check-deployment.ps1 [url]  # Windows
+./check-deployment.sh [url]   # Linux/Mac
+```
+
+**📖 See [DEPLOYMENT.md](./DEPLOYMENT.md) for complete deployment guide**
+
+## VS Code Integration
 
 Add to your VS Code `settings.json`:
 

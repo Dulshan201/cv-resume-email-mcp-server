@@ -1,21 +1,9 @@
 [build]
-builder = "nixpacks"
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile.railway"
 
 [deploy]
-startCommand = "cd server && node dist/http-server.js"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
-restartPolicyType = "on-failure"der = "nixpacks"
-
-[deploy]
-  startCommand = "cd server && node dist/http-server.js"
-  healthcheckPath = "/health"
-  healthcheckTimeout = 300
-  restartPolicyType = "on-failure"  builder = "nixpacks"
-
-[deploy]
-  startCommand = "cd server && npm start"
-  healthcheckPath = "/health"
-  healthcheckTimeout = 100
-  restartPolicyType = "on-failure"
-  restartPolicyMaxRetries = 10
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10

@@ -2,13 +2,19 @@
 services:
   - type: web
     name: cv-email-mcp-server
-    env: node
+    runtime: docker
+    dockerfilePath: ./Dockerfile
     plan: free
-    buildCommand: cd server && npm install && npm run build
-    startCommand: cd server && npm start
+    region: oregon
+    branch: main
     healthCheckPath: /health
+    buildCommand: ""
+    startCommand: ""
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        fromService: true
+        value: 3000
+    scaling:
+      minInstances: 1
+      maxInstances: 1
