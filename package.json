@@ -7,9 +7,9 @@
     "node": ">=18.0.0"
   },
   "scripts": {
+    "build": "cd server && npm install && npm run build",
     "start": "cd server && npm start",
-    "build": "cd server && npm run build",
-    "install": "cd server && npm install"
+    "postinstall": "cd server && npm install"
   },
   "keywords": ["mcp", "model-context-protocol", "cv", "resume", "email"],
   "author": "Dulshan201",
