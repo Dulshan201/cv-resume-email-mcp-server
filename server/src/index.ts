@@ -2,7 +2,9 @@
 
 // Load environment variables first
 import * as dotenv from 'dotenv';
-dotenv.config();
+const result = dotenv.config();
+console.log('🔧 Dotenv result:', result);
+console.log('🔧 All environment vars:', Object.keys(process.env).filter(k => k.includes('PORT') || k.includes('NODE_ENV') || k.includes('HTTP') || k.includes('RAILWAY')));
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -94,32 +96,33 @@ class MCPServer {
   }
 
   async run(): Promise<void> {
-    // Check if we're running on Railway or need HTTP mode
-    // Be more aggressive about detecting deployment environments
+    // Always start in HTTP mode for deployment
+    // Check command line arguments first
+    const httpMode = process.argv.includes('--http');
+    
+    // Check for deployment environment variables
     const isDeployment = !!(
       process.env.PORT || 
       process.env.RAILWAY_ENVIRONMENT || 
       process.env.HTTP_MODE ||
       process.env.NODE_ENV === 'production' ||
       process.env.RAILWAY_PROJECT_ID ||
-      process.env.RAILWAY_SERVICE_ID ||
-      // Always use HTTP mode if PORT is available (common in cloud deployments)
-      process.env.PORT
+      process.env.RAILWAY_SERVICE_ID
     );
-    
-    // Force HTTP mode if any deployment indicators are present
-    const forceHttp = isDeployment || process.argv.includes('--http');
     
     console.log('🔍 Environment check:');
     console.log('  - PORT:', process.env.PORT);
-    console.log('  - RAILWAY_ENVIRONMENT:', process.env.RAILWAY_ENVIRONMENT);
-    console.log('  - RAILWAY_PROJECT_ID:', process.env.RAILWAY_PROJECT_ID);
     console.log('  - NODE_ENV:', process.env.NODE_ENV);
-    console.log('  - Args:', process.argv.slice(2));
-    console.log('  - Force HTTP:', forceHttp ? 'YES' : 'NO');
+    console.log('  - HTTP_MODE:', process.env.HTTP_MODE);
+    console.log('  - Command args:', process.argv.slice(2));
+    console.log('  - Is deployment:', isDeployment);
+    console.log('  - HTTP mode flag:', httpMode);
     
-    if (forceHttp) {
-      console.log('🚀 Starting HTTP server mode for deployment');
+    // Force HTTP mode if any deployment indicators are present OR if explicitly requested
+    const shouldUseHttp = isDeployment || httpMode;
+    
+    if (shouldUseHttp) {
+      console.log('🚀 Starting HTTP server mode');
       this.startHttpServer();
     } else {
       // Default stdio mode for local MCP usage

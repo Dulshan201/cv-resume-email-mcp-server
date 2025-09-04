@@ -48,7 +48,9 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // Load environment variables first
 var dotenv = require("dotenv");
-dotenv.config();
+var result = dotenv.config();
+console.log('🔧 Dotenv result:', result);
+console.log('🔧 All environment vars:', Object.keys(process.env).filter(function (k) { return k.includes('PORT') || k.includes('NODE_ENV') || k.includes('HTTP') || k.includes('RAILWAY'); }));
 var index_js_1 = require("@modelcontextprotocol/sdk/server/index.js");
 var stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
 var types_js_1 = require("@modelcontextprotocol/sdk/types.js");
@@ -86,7 +88,7 @@ var MCPServer = /** @class */ (function () {
         }); });
         // Handle tool calls
         this.server.setRequestHandler(types_js_1.CallToolRequestSchema, function (request) { return __awaiter(_this, void 0, void 0, function () {
-            var _a, name, args, tool, result, error_1;
+            var _a, name, args, tool, result_1, error_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -100,12 +102,12 @@ var MCPServer = /** @class */ (function () {
                         }
                         return [4 /*yield*/, tool.handler(args)];
                     case 2:
-                        result = _b.sent();
+                        result_1 = _b.sent();
                         return [2 /*return*/, {
                                 content: [
                                     {
                                         type: 'text',
-                                        text: result,
+                                        text: result_1,
                                     },
                                 ],
                             }];
@@ -144,28 +146,27 @@ var MCPServer = /** @class */ (function () {
     };
     MCPServer.prototype.run = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var isDeployment, forceHttp, transport;
+            var httpMode, isDeployment, shouldUseHttp, transport;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        httpMode = process.argv.includes('--http');
                         isDeployment = !!(process.env.PORT ||
                             process.env.RAILWAY_ENVIRONMENT ||
                             process.env.HTTP_MODE ||
                             process.env.NODE_ENV === 'production' ||
                             process.env.RAILWAY_PROJECT_ID ||
-                            process.env.RAILWAY_SERVICE_ID ||
-                            // Always use HTTP mode if PORT is available (common in cloud deployments)
-                            process.env.PORT);
-                        forceHttp = isDeployment || process.argv.includes('--http');
+                            process.env.RAILWAY_SERVICE_ID);
                         console.log('🔍 Environment check:');
                         console.log('  - PORT:', process.env.PORT);
-                        console.log('  - RAILWAY_ENVIRONMENT:', process.env.RAILWAY_ENVIRONMENT);
-                        console.log('  - RAILWAY_PROJECT_ID:', process.env.RAILWAY_PROJECT_ID);
                         console.log('  - NODE_ENV:', process.env.NODE_ENV);
-                        console.log('  - Args:', process.argv.slice(2));
-                        console.log('  - Force HTTP:', forceHttp ? 'YES' : 'NO');
-                        if (!forceHttp) return [3 /*break*/, 1];
-                        console.log('🚀 Starting HTTP server mode for deployment');
+                        console.log('  - HTTP_MODE:', process.env.HTTP_MODE);
+                        console.log('  - Command args:', process.argv.slice(2));
+                        console.log('  - Is deployment:', isDeployment);
+                        console.log('  - HTTP mode flag:', httpMode);
+                        shouldUseHttp = isDeployment || httpMode;
+                        if (!shouldUseHttp) return [3 /*break*/, 1];
+                        console.log('🚀 Starting HTTP server mode');
                         this.startHttpServer();
                         return [3 /*break*/, 3];
                     case 1:
