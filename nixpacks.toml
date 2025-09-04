@@ -1,10 +1,11 @@
 [phases.build]
 cmds = [
-  "cd server && npm install && npm run build"
+  "cd server && npm ci",
+  "cd server && npx tsc --skipLibCheck"
 ]
 
 [phases.start]
-cmd = "cd server && npm start"
+cmd = "node server/dist/http-server.js"
 
 [variables]
 NODE_ENV = "production"
