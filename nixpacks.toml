@@ -1,3 +1,6 @@
+[phases.install]
+cmds = ["echo 'Skipping root install'"]
+
 [phases.build]
 cmds = [
   "cd server && npm ci",
