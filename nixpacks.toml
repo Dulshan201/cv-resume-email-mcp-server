@@ -7,7 +7,7 @@ cmds = [
   "cd server && npx tsc --skipLibCheck"
 ]
 
-[phases.start]
+[start]
 cmd = "node server/dist/http-server.js"
 
 [variables]
