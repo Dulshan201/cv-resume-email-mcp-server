@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resumeTools = exports.CVParser = void 0;
 var zod_1 = require("zod");
-var pdf_js_1 = require("./parsers/pdf.js");
+var pdf_1 = require("./parsers/pdf");
 // Schemas
 var LoadCVSchema = zod_1.z.object({
     filePath: zod_1.z.string().describe('Path to the PDF CV file')
@@ -52,7 +52,7 @@ var CVParser = /** @class */ (function () {
     function CVParser() {
         this.cvData = null;
         this.rawText = '';
-        this.pdfParser = new pdf_js_1.PDFParser();
+        this.pdfParser = new pdf_1.PDFParser();
     }
     CVParser.prototype.loadCV = function (filePath) {
         return __awaiter(this, void 0, void 0, function () {

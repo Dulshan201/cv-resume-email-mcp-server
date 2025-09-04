@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PDFParser } from './parsers/pdf.js';
+import { PDFParser } from './parsers/pdf';
 
 // Types
 export interface CVData {
