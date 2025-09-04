@@ -8,7 +8,7 @@ cmds = [
 ]
 
 [start]
-cmd = "cd server && node dist/http-server.js"
+cmd = "cd server && node dist/index.js"
 
 [variables]
 NODE_ENV = "production"
