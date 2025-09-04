@@ -3,8 +3,7 @@ cmds = ["echo 'Skipping root install'"]
 
 [phases.build]
 cmds = [
-  "cd server && npm ci",
-  "cd server && npx tsc --skipLibCheck"
+  "cd server && npm ci"
 ]
 
 [start]
