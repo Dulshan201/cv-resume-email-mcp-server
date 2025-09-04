@@ -2,10 +2,10 @@
   "name": "cv-email-mcp-server",
   "version": "1.0.0",
   "description": "MCP server that provides CV parsing and email notification capabilities",
-  "main": "dist/server.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "echo 'Skipping TypeScript build for simple deployment'",
-    "start": "node dist/server.js",
+    "start": "node dist/index.js",
     "dev": "node dist/server.js",
     "watch": "echo 'Watch mode not needed for deployment'",
     "clean": "rimraf dist"
