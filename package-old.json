@@ -1,0 +1,21 @@
+{
+  "name": "cv-resume-email-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server that provides CV parsing and email notification capabilities",
+  "main": "server/dist/index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "cd server && npm install && npm run build",
+    "start": "cd server && npm start",
+    "postinstall": "cd server && npm install"
+  },
+  "keywords": ["mcp", "model-context-protocol", "cv", "resume", "email"],
+  "author": "Dulshan201",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dulshan201/cv-resume-email-mcp-server.git"
+  }
+}
