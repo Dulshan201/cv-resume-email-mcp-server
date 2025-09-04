@@ -1,0 +1,19 @@
+# Simple Dockerfile for Railway
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY server/package*.json ./
+
+# Install dependencies
+RUN npm ci --omit=dev
+
+# Copy built application
+COPY server/dist ./dist
+
+# Expose port
+EXPOSE 3000
+
+# Start the server
+CMD ["node", "dist/http-server.js"]
